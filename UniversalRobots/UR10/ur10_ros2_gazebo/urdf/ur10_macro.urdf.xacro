@@ -225,6 +225,22 @@
       </xacro:cylinder_inertial>
     </link>
 
+    <!-- Gripper link -->
+    <link name="${prefix}gripper_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="file://$(find ur10_ros2_gazebo)/meshes/visual/base_link.stl"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="file://$(find ur10_ros2_gazebo)/meshes/collision/base_link.stl"/>
+        </geometry>
+      </collision>
+    </link>
+
     <!-- Joints: -->
     <joint name="${prefix}base_link-base_link_inertia" type="fixed">
       <parent link="${prefix}base_link" />
@@ -307,6 +323,14 @@
          <safety_controller soft_lower_limit="${wrist_3_lower_limit + safety_pos_margin}" soft_upper_limit="${wrist_3_upper_limit - safety_pos_margin}" k_position="${safety_k_position}" k_velocity="0.0"/>
       </xacro:if>
       <dynamics damping="0" friction="0"/>
+    </joint>
+
+    <!-- wrist_3_link and gripper_link joint -->
+    <joint name="${prefix}gripper_joint" type="fixed">
+      <parent link="${prefix}wrist_3_link" />
+      <child link="${prefix}gripper_link" />
+      <origin xyz="0 0 0.0035" rpy="-1.571 3.14 0" />
+      <axis xyz="0 0 0" />
     </joint>
 
     <!-- ROS-Industrial 'base' frame - base_link to UR 'Base' Coordinates transform -->
